@@ -1,0 +1,50 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1", "user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="icon" herf="<%=app.favicon%>" type="image/x-icon" />
+	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<script src="js/jquery.min.js"></script>
+	<title><%=blog.name%></title>
+</head>
+<body>
+<div class="banner">
+	<div class="container">
+		<div class="header">
+			<div class="logo">
+				<a href="index.html"><img src="<%=blog.logoFile.path%>" class="img-responsive" alt="" /></a>
+			</div>
+			<div class="header-right">
+				<ul>
+					<li><a href="#"><i class="fb"> </i></a></li>
+					<li><a href="#"><i class="twt"> </i></a></li>
+				<li>
+				<div class="search2">
+					<form>
+						<input type="text" value="Search.." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search..';}">
+						<input type="submit" value="">
+					</form>
+				</div></li>
+					<div class="clearfix"></div>
+				</ul>
+					
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+		<div class="head-nav">
+			<span class="menu"> </span>
+				<ul class="cl-effect-15">
+					<li class="<%=(req.nav == "") ? "active" : ""%>"><a href="/">HOME</a></li>
+					<li class="<%=(req.nav == "about") ? "active" : ""%>"><a href="/about">ABOUT</a></li>
+					<li class="<%=(req.nav == "photos") ? "active" : ""%>"><a href="/photos">PHOTOS</a></li>
+					<li class="<%=(req.nav == "archives") ? "active" : ""%>"><a href="/archives">ARCHIVES</a></li>
+					<li class="<%=(req.nav == "contact") ? "active" : ""%>"><a href="/contact">CONTACT</a></li>
+					<div class="clearfix"> </div>
+				</ul>
+		</div>		 
+	</div> 
+</div>
+
+
