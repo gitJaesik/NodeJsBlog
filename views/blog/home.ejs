@@ -8,7 +8,7 @@
 	<li class="col-md-4">
 		<div class="dapibus">
 			<h2><%=post.title%></h2>
-			<p class="adm"><%=post.created_at%></p>
+			<p class="adm"><%=util.date_format(post.created_at, 'Y/m/d')%></p>
 			<% if (post.files.length > 0) { %>
 			<a href="/<%=post.id%>"><img src="<%=post.files[0].path%>" class="img-responsive" alt=""></a>
 			<% } %>
@@ -19,37 +19,37 @@
 	<% }) %>
 	<div class="clearfix"></div>
 	<div class="page">
-		<% if (posts.page.current != 1) { %><a class="btn red" href="?page=<%=posts.page.current-1%>">Prev</a><% } %>
-		<% if (posts.page.current < posts.page.total) { %><a class="btn blue" href="?page=<%=posts.page.current+1%>">Next</a><% } %>
+		<% if (posts.page.current != 1) { %><a class="btn red" href="?page=<%=posts.page.current-1%>&category=<%=posts.category%>">Prev</a><% } %>
+		<% if (posts.page.current < posts.page.total) { %><a class="btn blue" href="?page=<%=posts.page.current+1%>&category=<%=posts.category%>">Next</a><% } %>
 	</a>
 </ul>
 
 <div class="sidebar col-md-3">
+	<div class="categories">
+		<h4>Categories</h4>
+		<h6 class="<%=(posts.category == 'all') ? 'active' : ''%>"><a href="?category=all">All <span>(<%=categories.allCount%>)</span></h6>
+		<% categories.forEach(cate => { %>
+		<h6 class="<%=(posts.category === cate.id) ? 'active' : ''%>"><a href="?category=<%=cate.id%>"><%=cate.name%> <span>(<%=cate.count%>)</span></h6>
+		<% }) %>
+		<h6 class="<%=(posts.category === 0) ? 'active' : ''%>"><a href="?category=0">None <span>(<%=categories.noneCount%>)</span></h6>
+	</div>
 	<div class="posts">
 		<h4>Recent posts</h4>
-		<% posts.page.recentPosts.forEach(post => { %>
-			<h6><a href="/<%=post.id%>"><%=post.title%></a></h6>
+		<% recentPosts.forEach(post => { %>
+		<h6><a href="/<%=post.id%>"><%=post.title%></a></h6>
 		<% }) %>
 	</div>
 	<div class="comments">
 		<h4>Recent Comments</h4>
-		<% posts.page.recentComments.forEach(post => { %>
-			<h6><a href="/<%=post.post_id%>#comment_<%=post.id%>"><%=post.contents%></a></h6>
+		<% recentComments.forEach(comment => { %>
+		<h6><a href="/<%=comment.post_id%>#comment_<%=comment.id%>"><%=comment.contents%> <span>By</span> <%=comment.name%></a></h6>
 		<% }) %>
 	</div>
 	<div class="archievs">
 		<h4>Archives</h4>
-		<% posts.page.archives.forEach(post => { %> 
-			<h6><a href="#"><%=post.created_at%><span> (<%=post.count%>)</span></a></h6>
+		<% archives.forEach(arch => { %>
+		<h6><a href="/archive/<%=arch.date%>"><%=util.date_format(arch.date, 'F y')%> <span>(<%=arch.count%>)</span></a></h6>
 		<% }) %>
-	</div>
-	<div class="categories">
-		<h4>Categories</h4>
-		<h6><a href="#">All<span>(<%=posts.page.categories.allCount%>)</span></a></h6>
-		<% posts.page.categories.forEach(post => { %>
-			<h6><a href="?category=<%=post.id%>"><%=post.name%><span>(<%=post.count%>)</span></a></h6>
-		<% }) %>
-		<h6><a href="?category=0">None<span>(<%=posts.page.categories.noneCount%>)</span></a></h6>
 	</div>
 </div>
 

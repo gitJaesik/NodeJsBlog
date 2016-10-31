@@ -17,7 +17,6 @@ module.exports = (seq, Seq) => {
   }, {
     classMethods: {
       relate: (models) => {
-        models.Comment.belongsTo(models.Blog);
         models.Comment.hasMany(models.Comment, {as: 'childComment'});
       }
     }

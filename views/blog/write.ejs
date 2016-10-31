@@ -1,0 +1,25 @@
+<% include ../common/header %>
+
+<div class="content">
+	<div class="container">
+	<form id="postform" name="postform" action="/write" method="post">
+
+				<label for="title">title</label>
+				<input id="title" name="title" type="text" value="" size="30" required>
+				<div class="clearfix"></div>
+
+				<label for="category">category</label>
+				<input id="category" name="category" type="text" value="" size="30" required>
+				<div class="clearfix"></div>
+				
+				<label for="contents">contents</label>
+				<textarea name="contents" required></textarea>
+				<div class="clearfix"></div>
+			
+				<input name="submit" type="submit" id="submit" value="Submit">
+				<div class="clearfix"></div>
+			</form>
+	</div>
+</div>
+
+<% include ../common/footer %>

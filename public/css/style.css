@@ -22,6 +22,9 @@ body a{
 	padding: 2em 0;
 	border-bottom: 1px solid #6f879a;
 }
+.det_pic {
+	text-align: center;
+}
 .logo a{
 	display:block;
 }
@@ -352,6 +355,10 @@ a.link:hover{
 	line-height: 2em;
 	border-bottom: 1px solid #868f98;
 	text-decoration:none;
+}
+.categories h6.active a {
+	font-weight: 900;
+	color: #dc8e7f;
 }
 .categories h6 a:hover{
 	color: #dc8e7f;

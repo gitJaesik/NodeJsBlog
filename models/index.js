@@ -24,7 +24,10 @@ fs.readdirSync(path.normalize(__dirname)).forEach(fileName => {
 
 Object.keys(models).forEach(modelName => {
 	let Model = models[modelName];
-	if (Model.relate) Model.relate(models);
+	if (Model.relate) {
+		Model.relate(models);
+		delete Model.relate;
+	}
 });
 
 models.seq = seq;
@@ -77,7 +80,7 @@ if (process.env.DROP) {
 		// contact
 		}).then(_ => {
 			return models.Contact.bulkCreate([{
-				name: '문모씨',
+				name: '피모씨',
 				email: 'test@test.com',
 				contents: '졸려요',
 				blog_id: 1
@@ -98,7 +101,8 @@ if (process.env.DROP) {
 			}, {
 				name: 'image2.jpg',
 				path: '/files/image2.jpg',
-				type: 'image/jpg', blog_id: 1
+				type: 'image/jpg',
+				blog_id: 1
 			}]);
 
 		// post
@@ -110,31 +114,31 @@ if (process.env.DROP) {
 					title: 'post1',
 					contents: 'post1 contents',
 					category_id: 1,
-					blog_id: 1
+					blog_id: 1,
+					created_at: new Date(new Date() - 1000*60*60*24*30)
 				}).then(post => {
 
 					// post 1 comments and files and tags
 					return Promise.all([
 						models.Comment.bulkCreate([{
+							blog_id: 1,
 							post_id: post.id,
-							name: '문모씨',
+							name: '피모씨',
 							email: 'test@test.com',
 							contents: '댓글요',
-							blog_id: 1
-
 						}, {
+							blog_id: 1,
 							post_id: post.id,
 							name: '김모씨',
 							email: 'test2@test.com',
 							contents: '댓글2요',
-							blog_id: 1
 						}, {
+							blog_id: 1,
 							post_id: post.id,
 							comment_id: 1,
 							name: '김모씨',
 							email: 'test2@test.com',
 							contents: '1번 댓글에 대댓글요',
-							blog_id: 1
 						}]),
 						post.setFiles([1,2]),
 						post.setTags([1,2])
@@ -152,24 +156,24 @@ if (process.env.DROP) {
 					// post 2 comments and files and tags
 					return Promise.all([
 						models.Comment.bulkCreate([{
+							blog_id: 1,
 							post_id: post.id,
-							name: '문2모씨',
+							name: '피2모씨',
 							email: 'test@test.com',
 							contents: '댓2글요',
-							blog_id: 1
 						}, {
+							blog_id: 1,
 							post_id: post.id,
 							name: '김2모씨',
 							email: 'test2@test.com',
 							contents: '댓2글2요',
-							blog_id: 1
 						}, {
+							blog_id: 1,
 							post_id: post.id,
 							comment_id: 5,
 							name: '김2모씨',
 							email: 'test2@test.com',
 							contents: '2번 댓글에 대댓글요',
-							blog_id: 1
 						}]),
 						post.setFiles([2]),
 						post.setTags([3]),
@@ -178,61 +182,15 @@ if (process.env.DROP) {
 
 				// post 3
 				models.Post.create({
-					title: 'post3',
+					title: 'post3 (about post)',
 					contents: 'post3 contents',
-					category_id: 2,
+					category_id: null,
 					blog_id: 1
-				}).then(post => {
-
-					// post 3 comments and files and tags
-					return Promise.all([
-						models.Comment.bulkCreate([{
-							post_id: post.id,
-							name: '피3모씨',
-							email: 'test@test.com',
-							contents: '댓2글요',
-							blog_id: 1
-						}, {
-							post_id: post.id,
-							name: '김3모씨',
-							email: 'test2@test.com',
-							contents: '댓2글2요',
-							blog_id: 1
-						}]),
-						post.setFiles([2]),
-						post.setTags([3]),
-					]);
 				}),
 
-				// post 4
-				models.Post.create({
-					title: 'post4',
-					contents: 'post4 contents',
-					blog_id: 1
-				}).then(post => {
-
-					// post 3 comments and files and tags
-					return Promise.all([
-						models.Comment.bulkCreate([{
-							post_id: post.id,
-							name: '피4모씨',
-							email: 'test@test.com',
-							contents: '댓2글요',
-							blog_id: 1
-						}, {
-							post_id: post.id,
-							name: '김4모씨',
-							email: 'test2@test.com',
-							contents: '댓2글2요',
-							blog_id: 1
-						}]),
-						post.setFiles([2]),
-						post.setTags([3]),
-					]);
-				}),
 				// blog logo file and about post
 				blog.setLogoFile(2),
-				blog.setAboutPost(2)
+				blog.setAboutPost(3)
 			]);
 		}).then(_ => {
 

@@ -1,0 +1,124 @@
+<% include ../common/header %>
+
+<div class="details">
+	<div class="container">
+		<% if (post.image){ %>
+		<div class="det_pic">
+		  <img src="<%=post.image.path%>" class="swipebox img-responsive" alt="<%=post.image.name%>">
+		</div>
+		<% } %>
+		<div class="det_text">
+			<p><%-util.nl2br(post.contents)%></p>
+		</div>
+		<ul class="links">
+			<li><i class="date"> </i><span class="icon_text"><%=util.date_format(post.created_at, 'F d, Y')%></span></li>
+			<li><a href="/"><i class="admin"> </i><span class="icon_text"><%=blog.name%></span></a></li>
+			<li class="last"><a href="<%=req.url%>"><i class="permalink"> </i><span class="icon_text"><%=req.url%></span></a></li>
+		</ul>
+		<ul class="links_middle">
+			<li>
+				<a href="/?category=<%=(post.category) ? post.category.id : 0%>"><i class="title-icon"> </i><span class="icon_text"><%=(post.category) ? post.category.name : 'None'%></span></a>
+				</li>
+			<li>
+				<i class="tags"> </i>
+				<% if (post.tags.length == 0) { %>
+				<span class="icon_text">No tags</span>
+				<% } else post.tags.forEach((tag,i) => { %>
+				<a href="/?tag=<%=tag.name%>"><span class="icon_text"><%=tag.name%></span></a><%=(i != post.tags.length-1) ? ', ':''%>
+				<% }); %>
+			</li>
+		</ul>
+		<ul class="links_bottom">
+			<li><a href="#comment_write"><i class="comments"> </i><span class="icon_text"><%=post.comments.length%> Comments</span></a></li>
+			<li><i class="views"> </i><span class="icon_text"><%=post.hit%></span></li>
+			<li><a onclick="like(<%=post.id%>)" style="cursor:pointer"><i class="likes"> </i><span id="like_number" class="icon_text"><%=post.like%></span></a></li>
+		</ul>
+
+		<div class="comments1">
+		<h4>COMMENTS</h4>
+			<% post.comments.filter(com => com.comment_id == null).forEach(com => { %>
+			<div class="comments-main">
+				<a name="comment_<%=com.id%>" style="visible:hidden"></a>
+				<div class="col-md-10 cmts-main-right">
+					<h5><%=com.name%> <small><%=com.email%></small></h5>
+					<p><%-util.nl2br(com.contents)%></p>
+					<div class="cmts">
+						<div class="cmnts-left">
+							<p>On <%=util.date_format(com.created_at, 'F d, Y, H:i')%></p>
+						</div>
+						<div class="cmnts-right">
+							<% com.childComment.forEach(ccom => { %>
+							<div class="comments-main">
+								<a name="comment_<%=ccom.id%>" style="visible:hidden"></a>
+								<div class="col-md-10 cmts-main-right">
+									<h5><%=ccom.name%> <small><%=ccom.email%></small></h5>
+									<p><%-util.nl2br(ccom.contents)%></p>
+									<div class="cmts">
+										<div class="cmnts-left">
+											<p>On <%=util.date_format(ccom.created_at, 'F d, Y, H:i')%></p>
+										</div>
+										<div class="clearfix"></div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<% }) %>
+							<a href="#">Reply</a>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<% }) %>
+		</div>
+
+		<div class="lev">
+			<div class="leave">
+			<a name="comment_write"></a>
+			<h4>Leave a comment</h4>
+			</div>
+			<form id="commentform" name="commentform" action="/comment/<%=post.id%>" method="post">
+				<input type="hidden" name="comment_id" value="">
+
+				<label for="author">Name</label>
+				<input id="author" name="name" type="text" value="" size="30" required>
+				
+				<label for="email">Email</label>
+				<input id="email" name="email" type="text" value="" size="30" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+				
+				<label for="comment">Comment</label>
+				<textarea name="contents" required></textarea>
+				<div class="clearfix"></div>
+			
+				<input name="submit" type="submit" id="submit" value="Submit">
+				<div class="clearfix"></div>
+			</form>
+		</div>
+
+	</div>
+</div>
+
+<script>
+function like(post_id){
+	$.get('/like/'+post_id)
+		.then(function(res){
+			if (res.updated) {
+				$('#like_number').text(res.like);
+			} else {
+				alert('No thanks!');
+			}
+		});
+}
+var form = document.forms.commentform;
+form.onsubmit = function(e){
+	e.preventDefault();
+	var self = this;
+	$.post(this.action, $(this).serialize())
+		.then(function(res){
+			location.hash = '#comment_'+res.id;
+			location.reload();
+		});
+};
+</script>
+<% include ../common/footer %>
