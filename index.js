@@ -3,7 +3,7 @@ const path = require('path');
 const config = require(path.join(__dirname, 'config'));
 const express = require('express');
 // fileUpload를 위한 모듈 사용
-var fileUpload = require('express-fileupload');
+// var fileUpload = require('express-fileupload');
 const app = express();
 
 /** configuration **/
@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use([
 		require('morgan')('dev'),
 		require('express-session')({secret: config['session-secret'], resave: true, saveUninitialized: true}),
-		fileUpload(),
+		
 	]);
 
 /** utils **/
@@ -46,6 +46,7 @@ app.use((req,res,next) => {
 
 	next();
 });
+
 app.use('/', require(path.join(__dirname, 'controllers/blog-router')));
 app.use('/admin', require(path.join(__dirname, 'controllers/admin-router')));
 

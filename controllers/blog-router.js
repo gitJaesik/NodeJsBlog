@@ -133,37 +133,39 @@ router.get('/write', (req,res) => {
 // write에서 db로 파일을 보낼 때 사용하는 곳
 router.post('/write', bodyParser.urlencoded(), (req,res) => {
 
-	// Promise.all([
-	// 	res.blog.getCategories({
-	// 		where : {
-	// 			name : req.body.category
-	// 		}
-	// 	}),
-	// 	res.blog.countCategories(),
-	// 	res.blog.coutPosts();
-	// ]).then( result => {
-	// 	var hasCategories = result[0];
+	console.log(req.body);
 
-	// 	var write_category_id;
-	// 	if (hasCategories.length == 0) {
-	// 		write_category_id = result[1];
-	// 	}else {
-	// 		write_category_id = hasCategories.id;
-	// 	}
+	Promise.all([
+		res.blog.getCategories({
+			where : {
+				name : req.body.category
+			}
+		}),
+		res.blog.countCategories(),
+		res.blog.countPosts()
+	]).then( result => {
+		var hasCategories = result[0];
 
-	// 	var data = {
-	// 			title: req.body.title,
-	// 			contents: req.body.contents,
-	// 			category_id: write_category_id,
-	// 			blog_id: 1,
-	// 			created_at: new Date(new Date() - 1000*60*60*24*30)
-	// 	}
-	// 	models.Post.create({
-	// 				data
-	// 	}).then(post => {
-	// 		res.render('blog/home');
-	// 	});
-	// });
+		var write_category_id;
+		if (hasCategories.length == 0) {
+			write_category_id = result[1];
+		}else {
+			write_category_id = hasCategories.id;
+		}
+
+		var data = {
+				title: req.body.title,
+				contents: req.body.contents,
+				category_id: write_category_id,
+				blog_id: 1,
+				created_at: new Date(new Date() - 1000*60*60*24*30)
+		}
+		models.Post.create(
+					data
+		).then(post => {
+			res.render('blog/');
+		});
+	});
 	
 });
 
